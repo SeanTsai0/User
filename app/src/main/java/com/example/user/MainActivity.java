@@ -1,25 +1,19 @@
 package com.example.user;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import org.json.JSONObject;
-
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
@@ -52,11 +46,11 @@ public class MainActivity extends AppCompatActivity {
             else {
                 String phone = userField.getText().toString();
                 String password = passwordField.getText().toString();
-                Map<String, String>postData =new HashMap<>();
+                Map<String, String> postData = new HashMap<>();
                 postData.put("phone", phone);
                 postData.put("password", password);
                 HttpPostAsyncTask task =new HttpPostAsyncTask(postData);
-                task.execute("http://172.20.10.2:8080/server-side/read.php");
+                task.execute("http://172.20.10.2:8080/server-side/login.php");
             }
         });
         SignUpBtn.setOnClickListener(v -> {
@@ -81,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
             HttpURLConnection urlConnection;
 
             try {
+
                 url = new URL(params[0]);
                 urlConnection = (HttpURLConnection) url.openConnection();
 
@@ -108,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
                         }
 
                     } catch (IOException e) {
-                        Log.e("error",e.getMessage());
+                        Log.e("Debug",e.getMessage());
                     }
                 }
             } catch (Exception e) {
@@ -120,19 +115,23 @@ public class MainActivity extends AppCompatActivity {
         protected void onPostExecute(String postResult) {
             try {
                 JSONObject jsonObject = new JSONObject(postResult);
-                int status = jsonObject.getInt("status"); // 解析php回傳的json，擷取boolean "status"
+                String status = jsonObject.getString("status"); // 解析php回傳的json，擷取int "status"
+                Log.d("status", status);
 
                 switch (status) {
-                    case 1:
+                    case "1":
+                        String SID = jsonObject.getString("SID");
+                        SharedPreferences sharedPreferences = getSharedPreferences("sharePreferences", MODE_PRIVATE);
+                        sharedPreferences.edit().putString("SID", SID).commit();
                         Intent intent = new Intent(MainActivity.this, UserInterface.class);
                         startActivity(intent);
                         break;
-                    case -1:
+                    case "-1":
                         new AlertDialog.Builder(MainActivity.this)
                                 .setTitle("用戶名稱錯誤")
                                 .setMessage("你輸入的號碼似乎不屬於任何帳號。請檢查電話號碼，然後再試一次。").show();
                         break;
-                    case 0:
+                    case "0":
                         new AlertDialog.Builder(MainActivity.this)
                                 .setTitle("密碼錯誤")
                                 .setMessage("請檢查密碼，並重新登入。").show();
