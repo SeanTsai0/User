@@ -16,6 +16,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,6 +31,8 @@ public class Register extends AppCompatActivity {
         EditText phoneField = findViewById(R.id.phoneField);
         EditText passwordField = findViewById(R.id.passwordField);
         EditText confirmPasswordField = findViewById(R.id.confirmPasswordField);
+        EditText genderField = findViewById(R.id.genderField);
+        EditText emailField = findViewById(R.id.emailField);
         Button registerBtn = findViewById(R.id.registerBtn);
 
         registerBtn.setOnClickListener(v -> {
@@ -45,15 +48,25 @@ public class Register extends AppCompatActivity {
             } else if (!passwordField.getText().toString().equals(confirmPasswordField.getText().toString())) {
                 confirmPasswordField.requestFocus();
                 confirmPasswordField.setError("重複輸入的密碼錯誤");
+            } else if (TextUtils.isEmpty(genderField.getText())) {
+                genderField.requestFocus();
+                genderField.setError("Field Cannot Be Empty");
+            } else if (TextUtils.isEmpty(emailField.getText())) {
+                emailField.requestFocus();
+                emailField.setError("Field Cannot Be Empty");
             }
             else {
                 String name = nameField.getText().toString();
                 String phone = phoneField.getText().toString();
                 String password = passwordField.getText().toString();
+                String gender = genderField.getText().toString();
+                String email = emailField.getText().toString();
                 Map<String, String> postData = new HashMap<>();
                 postData.put("name", name);
                 postData.put("phone", phone);
                 postData.put("password", password);
+                postData.put("gender", gender);
+                postData.put("email", email);
                 HttpInsertAsyncTask task = new HttpInsertAsyncTask(postData);
                 task.execute("http://172.20.10.2:8080/server-side/insert.php");
             }
@@ -70,7 +83,7 @@ public class Register extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... params) {
-            String response = "";
+            StringBuilder response = new StringBuilder();
             URL url;
             HttpURLConnection urlConnection;
 
@@ -94,11 +107,11 @@ public class Register extends AppCompatActivity {
 
                 if (responseCode == HttpURLConnection.HTTP_OK) {
 
-                    BufferedReader reader= new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "UTF-8"));
-                    String line = "";
+                    BufferedReader reader= new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), StandardCharsets.UTF_8));
+                    String line;
                     try {
                         while((line = reader.readLine()) != null) {
-                            response += line;
+                            response.append(line);
                         }
 
                     } catch (IOException e) {
@@ -108,14 +121,23 @@ public class Register extends AppCompatActivity {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            return response;
+            return response.toString();
         }
 
         protected void onPostExecute(String postResult) {
             try {
-                Toast.makeText(Register.this, "註冊成功", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(Register.this, MainActivity.class);
-                startActivity(intent);
+                JSONObject jsonObject = new JSONObject(postResult);
+                String status = jsonObject.getString("status");
+                Log.d("Debug", postResult);
+
+                if (status.equals("1")) {
+                    Toast.makeText(Register.this, "註冊成功", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(Register.this, MainActivity.class);
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(Register.this, "註冊失敗", Toast.LENGTH_SHORT).show();
+                }
+
             } catch (Exception e) {
                 e.printStackTrace();
             }

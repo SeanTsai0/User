@@ -77,6 +77,32 @@
             android:background="@android:color/transparent"
             android:hint="retype your password"
             android:textColorHint="#bfbfbf" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#e6e6e6" />
+
+        <EditText
+            android:id="@+id/genderField"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:hint="gender"
+            android:textColorHint="#bfbfbf" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#e6e6e6" />
+
+        <EditText
+            android:id="@+id/emailField"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:hint="E-mail"
+            android:textColorHint="#bfbfbf" />
     </LinearLayout>
 
     <Button

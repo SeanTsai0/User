@@ -14,21 +14,23 @@ public class UserInterface extends AppCompatActivity {
 
         Button userInfo_btn = findViewById(R.id.userInfo_btn);
         Button record_btn = findViewById(R.id.record_btn);
+        Button pick_up_btn = findViewById(R.id.pick_up_btn);
         Button SignOut_btn = findViewById(R.id.SignOut_btn);
 
         userInfo_btn.setOnClickListener(v -> {
-            Intent intent = new Intent(UserInterface.this, UserInfo.class);
-            startActivity(intent);
+            startActivity(new Intent(UserInterface.this, UserInfo.class));
         });
 
         record_btn.setOnClickListener(v->{
-            Intent intent = new Intent(UserInterface.this, Record.class);
-            startActivity(intent);
+            startActivity(new Intent(UserInterface.this, Record.class));
+        });
+
+        pick_up_btn.setOnClickListener(v -> {
+
         });
 
         SignOut_btn.setOnClickListener(v->{
-            Intent intent = new Intent(UserInterface.this, MainActivity.class);
-            startActivity(intent);
+            startActivity(new Intent(UserInterface.this, MainActivity.class));
         });
 
     }

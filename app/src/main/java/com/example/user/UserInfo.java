@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import org.json.JSONObject;
 import java.io.BufferedReader;
@@ -12,17 +13,18 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
 public class UserInfo extends AppCompatActivity {
     public static TextView nameInfo, genderInfo, emailInfo, phoneInfo;
     static String rName , rGender, rMail, rPhone;
-    private final static int DO_UPDATE_TEXT = 0, DO_THAT = 1;
+    private final static int DO_UPDATE_TEXT = 0;
     private static final Handler handler = new Handler(msg -> {
         final int what = msg.what;
-        switch (what) {
-            case DO_UPDATE_TEXT: doUpdate(); break;
+        if (what == DO_UPDATE_TEXT) {
+            doUpdate();
         }
         return false;
     });
@@ -42,6 +44,9 @@ public class UserInfo extends AppCompatActivity {
         genderInfo = findViewById(R.id.genderInfo);
         emailInfo = findViewById(R.id.emailInfo);
         phoneInfo = findViewById(R.id.phoneInfo);
+        ImageButton back_btn = findViewById(R.id.back_btn);
+
+        back_btn.setOnClickListener(v -> finish());
 
         Map<String, String> postData = new HashMap<>();
         String SID = getSharedPreferences("sharePreferences", MODE_PRIVATE).getString("SID", "null");
@@ -49,10 +54,9 @@ public class UserInfo extends AppCompatActivity {
 
         GetRecord getRecord = new GetRecord(postData);
         getRecord.execute("http://172.20.10.2:8080/server-side/record.php");
-
     }
 
-    protected static class GetRecord extends AsyncTask<String, Void, String> {
+    protected class GetRecord extends AsyncTask<String, Void, String> {
         JSONObject postData;
 
         public GetRecord(Map<String, String> postData) {
@@ -63,7 +67,7 @@ public class UserInfo extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... params) {
-            String response = "";
+            StringBuilder response = new StringBuilder();
             URL url;
             HttpURLConnection urlConnection;
 
@@ -87,11 +91,11 @@ public class UserInfo extends AppCompatActivity {
                 int responseCode = urlConnection.getResponseCode();
 
                 if (responseCode == HttpURLConnection.HTTP_OK) {
-                    BufferedReader reader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "UTF-8"));
-                    String line = "";
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), StandardCharsets.UTF_8));
+                    String line;
                     try {
                         while ((line = reader.readLine()) != null) {
-                            response += line;
+                            response.append(line);
                         }
                     } catch(Exception e) {
                         Log.e("Debug", e.getMessage());
@@ -100,7 +104,7 @@ public class UserInfo extends AppCompatActivity {
             } catch (Exception e) {
                 Log.e("Debug", e.getMessage());
             }
-            return response;
+            return response.toString();
         }
 
         protected void onPostExecute(String postResult) {

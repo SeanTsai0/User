@@ -10,7 +10,6 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -18,6 +17,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,7 +32,6 @@ public class MainActivity extends AppCompatActivity {
         EditText passwordField = findViewById(R.id.passwordEditText);
         Button LogInBtn = findViewById(R.id.LogInBtn);
         Button SignUpBtn = findViewById(R.id.SignUpBtn);
-        TextView forgotPassword = findViewById(R.id.forgotPasswordBtn);
 
         LogInBtn.setOnClickListener(v -> {
             if (TextUtils.isEmpty(userField.getText())) {
@@ -63,14 +62,13 @@ public class MainActivity extends AppCompatActivity {
         JSONObject postData;
 
         public HttpPostAsyncTask(Map<String, String> postData) {
-            if (postData != null) {
+            if (postData != null)
                 this.postData = new JSONObject(postData);
-            }
         }
 
         @Override
         protected String doInBackground(String... params) {
-            String response = "";
+            StringBuilder response = new StringBuilder();
             URL url;
             HttpURLConnection urlConnection;
 
@@ -95,11 +93,11 @@ public class MainActivity extends AppCompatActivity {
 
                 if (responseCode == HttpURLConnection.HTTP_OK) {
 
-                    BufferedReader reader= new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "UTF-8"));
-                    String line = "";
+                    BufferedReader reader= new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), StandardCharsets.UTF_8));
+                    String line;
                     try {
                         while((line = reader.readLine()) != null) {
-                            response += line;
+                            response.append(line);
                         }
 
                     } catch (IOException e) {
@@ -109,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            return response;
+            return response.toString();
         }
 
         protected void onPostExecute(String postResult) {
@@ -122,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
                     case "1":
                         String SID = jsonObject.getString("SID");
                         SharedPreferences sharedPreferences = getSharedPreferences("sharePreferences", MODE_PRIVATE);
-                        sharedPreferences.edit().putString("SID", SID).commit();
+                        sharedPreferences.edit().putString("SID", SID).apply();
                         Intent intent = new Intent(MainActivity.this, UserInterface.class);
                         startActivity(intent);
                         break;

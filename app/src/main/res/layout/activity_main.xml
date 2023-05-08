@@ -8,15 +8,14 @@
     tools:context=".MainActivity">
 
     <TextView
-        android:id="@+id/homeTitle"
+        android:id="@+id/Title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="144dp"
-        android:text="USER."
-        android:textSize="50dp"
-        android:textStyle="bold"
+        android:layout_marginTop="128dp"
+        android:text="DEMO"
+        android:textSize="60dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -24,23 +23,23 @@
         android:id="@+id/linearLayout"
         android:layout_width="380dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="52dp"
+        android:layout_marginTop="88dp"
         android:background="@drawable/shape"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.533"
+        app:layout_constraintHorizontal_bias="0.516"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/homeTitle">
+        app:layout_constraintTop_toBottomOf="@+id/Title">
 
         <EditText
             android:id="@+id/userEditText"
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:layout_marginEnd="10dp"
             android:background="@android:color/transparent"
             android:hint="Phone number"
             android:inputType="phone"
             android:paddingStart="20dp"
-            android:layout_marginEnd="10dp"
             android:textColorHint="#bfbfbf" />
 
         <View
@@ -52,11 +51,11 @@
             android:id="@+id/passwordEditText"
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:layout_marginEnd="10dp"
             android:background="@android:color/transparent"
             android:hint="Password"
             android:inputType="textPassword"
             android:paddingStart="20dp"
-            android:layout_marginEnd="10dp"
             android:textColorHint="#bfbfbf" />
     </LinearLayout>
 
@@ -72,17 +71,6 @@
         app:layout_constraintHorizontal_bias="0.483"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
-
-    <TextView
-        android:id="@+id/forgotPasswordBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:text="@string/forgot_Password"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/LogInBtn"
-        android:clickable="true" />
 
     <Button
         android:id="@+id/SignUpBtn"
