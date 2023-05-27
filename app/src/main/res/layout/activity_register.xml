@@ -4,118 +4,199 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ffdb4d"
+    android:background="#000000"
     tools:context=".Register">
 
-    <TextView
-        android:id="@+id/Title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="44dp"
-        android:text="USER."
-        android:textSize="50dp"
-        android:textStyle="bold"
+    <FrameLayout
+        android:id="@+id/frameLayout2"
+        android:layout_width="407dp"
+        android:layout_height="259dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:maxWidth="50dp"
+            android:scaleType="center"
+            android:src="@drawable/background" />
+
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="150dp"
+            android:layout_gravity="bottom"
+            android:background="@drawable/gradient" />
+
+        <TextView
+            android:id="@+id/Title"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="註 冊"
+            android:textColor="#ffffff"
+            android:textSize="50dp"
+            android:textStyle="bold"
+            android:layout_marginTop="50dp"/>
+
+    </FrameLayout>
 
     <LinearLayout
         android:id="@+id/linearLayout2"
         android:layout_width="370dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="44dp"
-        android:background="@drawable/shape"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Title">
+        app:layout_constraintTop_toBottomOf="@+id/frameLayout2">
 
-        <EditText
-            android:id="@+id/NameField"
+        <LinearLayout
+            android:id="@+id/name_group"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            android:hint="Name"
-            android:textColorHint="#bfbfbf" />
+            android:layout_height="match_parent"
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#e6e6e6" />
+            android:layout_marginVertical="4dp"
+            android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/phoneField"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            android:hint="phone"
-            android:textColorHint="#bfbfbf" />
+            <TextView
+                android:id="@+id/name_textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="姓名"
+                android:textColor="#ffffff"/>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#e6e6e6" />
+            <EditText
+                android:id="@+id/NameField"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/shape"
+                android:hint="Name"
+                android:textColorHint="#bfbfbf"
+                android:textSize="20dp" />
 
-        <EditText
-            android:id="@+id/passwordField"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            android:hint="password"
-            android:textColorHint="#bfbfbf" />
+        </LinearLayout>
 
-        <View
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#e6e6e6" />
+            android:layout_height="match_parent"
+            android:layout_marginVertical="4dp"
+            android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/confirmPasswordField"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            android:hint="retype your password"
-            android:textColorHint="#bfbfbf" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#ffffff"
+                android:text="電話" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#e6e6e6" />
+            <EditText
+                android:id="@+id/phoneField"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/shape"
+                android:inputType="phone"
+                android:hint="phone"
+                android:textColorHint="#bfbfbf" />
 
-        <EditText
-            android:id="@+id/genderField"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            android:hint="gender"
-            android:textColorHint="#bfbfbf" />
+        </LinearLayout>
 
-        <View
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#e6e6e6" />
+            android:layout_height="match_parent"
+            android:layout_marginVertical="4dp"
+            android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/emailField"
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="密碼"
+                android:textColor="#ffffff"/>
+
+            <EditText
+                android:id="@+id/passwordField"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/shape"
+                android:hint="password"
+                android:textColorHint="#bfbfbf" />
+
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            android:hint="E-mail"
-            android:textColorHint="#bfbfbf" />
+            android:layout_height="match_parent"
+            android:layout_marginVertical="4dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="確認密碼"
+                android:textColor="#ffffff"/>
+
+            <EditText
+                android:id="@+id/confirmPasswordField"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/shape"
+                android:hint="retype your password"
+                android:textColorHint="#bfbfbf" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginVertical="4dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="性別"
+                android:textColor="#ffffff"/>
+
+            <Spinner
+                android:id="@+id/genderField"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/shape"
+                android:overlapAnchor="false" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginVertical="4dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="電子信箱"
+                android:textColor="#ffffff"/>
+
+            <EditText
+                android:id="@+id/emailField"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/shape"
+                android:hint="E-mail"
+                android:textColorHint="#bfbfbf" />
+
+        </LinearLayout>
+
     </LinearLayout>
 
     <Button
         android:id="@+id/registerBtn"
         android:layout_width="359dp"
         android:layout_height="55dp"
-        android:layout_marginTop="52dp"
-        android:text="register"
-        android:backgroundTint="#e6b800"
+        android:background="@drawable/shape"
+        android:text="SIGN UP"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

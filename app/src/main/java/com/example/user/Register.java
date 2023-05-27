@@ -6,8 +6,13 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 import org.json.JSONObject;
 import java.io.BufferedReader;
@@ -21,19 +26,26 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Register extends AppCompatActivity {
+    private static String TAG = "Register";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
         EditText nameField = findViewById(R.id.NameField);
         EditText phoneField = findViewById(R.id.phoneField);
         EditText passwordField = findViewById(R.id.passwordField);
         EditText confirmPasswordField = findViewById(R.id.confirmPasswordField);
-        EditText genderField = findViewById(R.id.genderField);
+        Spinner genderField = findViewById(R.id.genderField);
         EditText emailField = findViewById(R.id.emailField);
         Button registerBtn = findViewById(R.id.registerBtn);
+
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.sex, R.layout.spinner_item);
+        adapter.setDropDownViewResource(R.layout.drop_down_spinner_item);
+        genderField.setAdapter(adapter);
 
         registerBtn.setOnClickListener(v -> {
             if (TextUtils.isEmpty(nameField.getText())) {
@@ -48,10 +60,10 @@ public class Register extends AppCompatActivity {
             } else if (!passwordField.getText().toString().equals(confirmPasswordField.getText().toString())) {
                 confirmPasswordField.requestFocus();
                 confirmPasswordField.setError("重複輸入的密碼錯誤");
-            } else if (TextUtils.isEmpty(genderField.getText())) {
+            } /*else if (TextUtils.isEmpty(genderField.getText())) {
                 genderField.requestFocus();
                 genderField.setError("Field Cannot Be Empty");
-            } else if (TextUtils.isEmpty(emailField.getText())) {
+            }*/ else if (TextUtils.isEmpty(emailField.getText())) {
                 emailField.requestFocus();
                 emailField.setError("Field Cannot Be Empty");
             }
@@ -59,7 +71,7 @@ public class Register extends AppCompatActivity {
                 String name = nameField.getText().toString();
                 String phone = phoneField.getText().toString();
                 String password = passwordField.getText().toString();
-                String gender = genderField.getText().toString();
+                String gender = genderField.getSelectedItem().toString();
                 String email = emailField.getText().toString();
                 Map<String, String> postData = new HashMap<>();
                 postData.put("name", name);
@@ -128,16 +140,16 @@ public class Register extends AppCompatActivity {
             try {
                 JSONObject jsonObject = new JSONObject(postResult);
                 String status = jsonObject.getString("status");
-                Log.d("Debug", postResult);
-
+                Log.d(TAG, postResult);
                 if (status.equals("1")) {
                     Toast.makeText(Register.this, "註冊成功", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(Register.this, MainActivity.class);
                     startActivity(intent);
-                } else {
+                } else if (status.equals("-1")){
                     Toast.makeText(Register.this, "註冊失敗", Toast.LENGTH_SHORT).show();
+                } else if (status.equals("0")) {
+                    Toast.makeText(Register.this, "使用者已存在", Toast.LENGTH_SHORT).show();
                 }
-
             } catch (Exception e) {
                 e.printStackTrace();
             }

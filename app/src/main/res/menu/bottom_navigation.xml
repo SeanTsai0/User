@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/generate"
+        android:title="產生取貨條碼"
+        android:icon="@drawable/scanner" />
+    <item
+        android:id="@+id/information"
+        android:title="用戶資訊"
+        android:icon="@drawable/user"/>
+    <item
+        android:id="@+id/record"
+        android:title="取貨記錄"
+        android:icon="@drawable/verify"/>
+    <item
+        android:id="@+id/signOut"
+        android:title="登出"
+        android:icon="@drawable/exit"/>
+</menu>

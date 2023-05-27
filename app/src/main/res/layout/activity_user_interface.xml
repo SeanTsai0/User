@@ -4,55 +4,27 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ffdb4d"
+    android:background="#76aaad"
     tools:context=".UserInterface">
 
-    <Button
-        android:id="@+id/userInfo_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="136dp"
-        android:background="@drawable/btn_style"
-        android:text="使用者資訊"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <FrameLayout
+        android:id="@+id/frameLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"/>
 
-    <Button
-        android:id="@+id/record_btn"
-        android:layout_width="wrap_content"
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/navigation"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
-        android:text="取貨紀錄"
-        android:background="@drawable/btn_style"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/userInfo_btn" />
-
-    <Button
-        android:id="@+id/pick_up_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="60dp"
-        android:background="@drawable/btn_style"
-        android:text="取貨"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/record_btn" />
-
-    <Button
-        android:id="@+id/SignOut_btn"
-        android:layout_width="207dp"
-        android:layout_height="62dp"
-        android:background="@drawable/btn_style"
-        android:text="登出"
+        android:background="#418f94"
+        app:itemTextColor="@color/black"
+        app:itemIconTint="@color/black"
+        app:labelVisibilityMode="labeled"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/pick_up_btn"
-        app:layout_constraintVertical_bias="1.0" />
+        app:menu="@menu/bottom_navigation" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

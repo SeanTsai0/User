@@ -1,13 +1,24 @@
 package com.example.user;
 
-import androidx.appcompat.app.AppCompatActivity;
+import static android.content.Context.MODE_PRIVATE;
+
 import android.os.AsyncTask;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
 import android.os.Handler;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
+
 import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -16,47 +27,46 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.zip.Inflater;
 
-public class UserInfo extends AppCompatActivity {
-    public static TextView nameInfo, genderInfo, emailInfo, phoneInfo;
-    static String rName , rGender, rMail, rPhone;
-    private final static int DO_UPDATE_TEXT = 0;
-    private static final Handler handler = new Handler(msg -> {
-        final int what = msg.what;
-        if (what == DO_UPDATE_TEXT) {
-            doUpdate();
-        }
-        return false;
-    });
-    private static void doUpdate() {
-        nameInfo.setText(rName);
-        genderInfo.setText(rGender);
-        emailInfo.setText(rMail);
-        phoneInfo.setText(rPhone);
+public class userInformation extends Fragment {
+
+    public userInformation() {
+        // Required empty public constructor
     }
 
+    public static TextView nameInfo, genderInfo, emailInfo, phoneInfo;
+    static String rName , rGender, rMail, rPhone;
+    private final static int DO_UPDATE_TEXT = 0, HOLD = 1;
+
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user_info);
-
-        nameInfo = findViewById(R.id.nameInfo);
-        genderInfo = findViewById(R.id.genderInfo);
-        emailInfo = findViewById(R.id.emailInfo);
-        phoneInfo = findViewById(R.id.phoneInfo);
-        ImageButton back_btn = findViewById(R.id.back_btn);
-
-        back_btn.setOnClickListener(v -> finish());
 
         Map<String, String> postData = new HashMap<>();
-        String SID = getSharedPreferences("sharePreferences", MODE_PRIVATE).getString("SID", "null");
+        String SID = this.getActivity().getSharedPreferences("sharePreferences", MODE_PRIVATE).getString("SID", "null");
         postData.put("SID", SID);
 
         GetRecord getRecord = new GetRecord(postData);
         getRecord.execute("http://172.20.10.2:8080/server-side/record.php");
     }
 
-    protected class GetRecord extends AsyncTask<String, Void, String> {
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_user_information, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle saveInstanceState) {
+        super.onViewCreated(view, saveInstanceState);
+        nameInfo = view.findViewById(R.id.nameInfo);
+        genderInfo = view.findViewById(R.id.genderInfo);
+        emailInfo = view.findViewById(R.id.emailInfo);
+        phoneInfo = view.findViewById(R.id.phoneInfo);
+    }
+    protected static class GetRecord extends AsyncTask<String, Void, String> {
         JSONObject postData;
 
         public GetRecord(Map<String, String> postData) {
@@ -122,4 +132,21 @@ public class UserInfo extends AppCompatActivity {
             }
         }
     }
+    private static void doUpdate() {
+        nameInfo.setText(rName);
+        genderInfo.setText(rGender);
+        emailInfo.setText(rMail);
+        phoneInfo.setText(rPhone);
+    }
+    private static final Handler handler = new Handler(msg -> {
+        final int what = msg.what;
+        switch (what) {
+            case DO_UPDATE_TEXT:
+                doUpdate();
+                break;
+            case HOLD:
+                break;
+        }
+        return false;
+    });
 }

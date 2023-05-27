@@ -1,0 +1,17 @@
+<resources>
+
+    <style name="Widget.Theme.User.ButtonBar.Fullscreen" parent="">
+        <item name="android:background">@color/black_overlay</item>
+        <item name="android:buttonBarStyle">?android:attr/buttonBarStyle</item>
+    </style>
+    
+    <style name="spinnerItemStyle" parent="android:Widget.TextView.SpinnerItem" >
+        <item name="android:background"></item>
+        <item name="android:textSize">20dp</item>
+    </style>
+
+    <style name="spinnerDropDownItemStyle" parent="TextAppearance.AppCompat.Widget.TextView.SpinnerItem" >
+        <item name="android:background" ></item>
+        <item name="android:radius">20dp</item>
+    </style>
+</resources>
