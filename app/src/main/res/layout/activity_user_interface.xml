@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#76aaad"
+    android:background="#9BABB8"
     tools:context=".UserInterface">
 
     <FrameLayout
@@ -17,9 +17,9 @@
         android:id="@+id/navigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#418f94"
-        app:itemTextColor="@color/black"
-        app:itemIconTint="@color/black"
+        android:background="#EEE3CB"
+        app:itemTextColor="@drawable/nav_color_selector"
+        app:itemIconTint="@drawable/nav_color_selector"
         app:labelVisibilityMode="labeled"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

@@ -1,14 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="72dp"
-    android:orientation="vertical"
-    android:gravity="center_vertical">
+    android:layout_height="70dp"
+    android:orientation="horizontal"
+    android:background="@drawable/shape"
+    android:backgroundTint="#EEE3CB"
+    android:layout_margin="5dp">
 
-    <TextView
-        android:id="@+id/order"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"/>
+        <TextView
+            android:id="@+id/order"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="5dp"
+            android:paddingStart="30dp"
+            android:textSize="20dp"
+            android:textColor="@color/black"
+            android:gravity="center_vertical"
+            android:text=""/>
 
-</LinearLayout>
+</FrameLayout>

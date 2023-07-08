@@ -39,7 +39,7 @@ public class UserInterface extends AppCompatActivity {
     private void dialog() {
         AlertDialog.Builder dialog = new AlertDialog.Builder(this);
         dialog.setMessage("是否確定要登出?");
-        dialog.setPositiveButton("確認", (dialog1, which) -> startActivity(new Intent(this, MainActivity.class)));
+        dialog.setPositiveButton("確認", (dialog1, which) -> finish());
         dialog.setNegativeButton("取消", (dialog12, which) -> {});
         dialog.show();
     }

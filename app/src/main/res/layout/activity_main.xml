@@ -1,113 +1,175 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:orientation="vertical"
+    android:background="#9BABB8">
 
     <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="centerCrop"
-        android:src="@drawable/background"
-        android:alpha="0.7"/>
+        android:id="@+id/logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:maxHeight="1000dp"
+        android:layout_marginTop="30dp"
+        android:src="@drawable/logo"
+        android:adjustViewBounds="true"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/HeaderGroup"/>
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:id="@+id/HeaderGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:gravity="center">
+        android:layout_marginStart="30dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/logo"
+        app:layout_constraintBottom_toTopOf="@id/linearLayout">
 
         <TextView
             android:id="@+id/Title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="DEMO"
-            android:textSize="60dp"
+            android:layout_marginVertical="10dp"
+            android:text="Login"
+            android:textSize="40dp"
             android:textStyle="bold"
             android:textColor="@color/black"
-            android:layout_gravity="center_horizontal"/>
+            android:layout_gravity="center_vertical"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="登入帳號以繼續" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="30dp"
+        android:layout_marginTop="10dp"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@id/HeaderGroup">
 
         <LinearLayout
-            android:id="@+id/linearLayout"
-            android:layout_width="380dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/shape"
-            android:orientation="vertical"
-            >
+            android:backgroundTint="#EEE3CB"
+            android:layout_marginVertical="5dp"
+            android:paddingStart="10dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxHeight="20dp"
+                android:src="@drawable/phone"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
+                android:layout_gravity="center" />
 
             <EditText
                 android:id="@+id/userEditText"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:layout_marginEnd="10dp"
-                android:background="@android:color/transparent"
-                android:hint="Phone number"
+                android:paddingStart="10dp"
+                android:background="@color/zxing_transparent"
+                android:hint="手機電話"
                 android:inputType="phone"
-                android:paddingStart="20dp"
                 android:textColorHint="#bfbfbf" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#e6e6e6" />
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal" >
-
-                <EditText
-                    android:id="@+id/passwordEditText"
-                    android:layout_width="330dp"
-                    android:layout_height="50dp"
-                    android:layout_marginEnd="10dp"
-                    android:background="@android:color/transparent"
-                    android:hint="Password"
-                    android:inputType="textPassword"
-                    android:paddingStart="20dp"
-                    android:textColorHint="#bfbfbf" />
-
-                <ImageButton
-                    android:id="@+id/psw_privacy"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/hide"
-                    android:background="@color/zxing_transparent"
-                    android:scaleType="fitCenter"
-                    android:layout_marginEnd="10dp"/>
-
-            </LinearLayout>
 
         </LinearLayout>
 
-        <Button
-            android:id="@+id/LogInBtn"
-            android:layout_width="380dp"
-            android:layout_height="55dp"
-            android:layout_marginTop="10dp"
-            android:text="Log In"
-            android:textColor="#000000"
-            android:backgroundTint="#6cced4"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.483"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="@drawable/shape"
+            android:backgroundTint="#EEE3CB"
+            android:paddingStart="10dp">
 
-        <Button
-            android:id="@+id/SignUpBtn"
-            android:layout_width="380dp"
-            android:layout_height="55dp"
-            android:layout_marginBottom="16dp"
-            android:backgroundTint="#50898c"
-            android:text="Sign Up"
-            android:textColor="#000000"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.483"
-            app:layout_constraintStart_toStartOf="parent" />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxHeight="20dp"
+                android:src="@drawable/lock"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
+                android:layout_gravity="center" />
+
+            <EditText
+                android:id="@+id/passwordEditText"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:paddingStart="10dp"
+                android:background="@android:color/transparent"
+                android:hint="密碼"
+                android:inputType="textPassword"
+                android:textColorHint="#bfbfbf" />
+
+            <ImageButton
+                android:id="@+id/psw_privacy"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:maxWidth="20dp"
+                android:adjustViewBounds="true"
+                android:src="@drawable/hide"
+                android:background="@color/zxing_transparent"
+                android:scaleType="fitCenter"
+                android:layout_marginEnd="10dp"/>
+
+        </LinearLayout>
 
     </LinearLayout>
 
-</FrameLayout>
+    <Button
+        android:id="@+id/LogInBtn"
+        android:layout_width="200dp"
+        android:layout_height="55dp"
+        android:background="@drawable/login_button_shape"
+        android:backgroundTint="#D7C0AE"
+        android:text="LOGIN"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/SignUpGroup"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/linearLayout" />
+
+    <LinearLayout
+        android:id="@+id/SignUpGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="還沒有帳號嗎?" />
+
+        <TextView
+            android:id="@+id/SignUpBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/zxing_transparent"
+            android:text="註冊"
+            android:textStyle="bold"
+            android:textColor="#D7C0AE"/>
+
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

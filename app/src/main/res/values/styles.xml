@@ -4,14 +4,27 @@
         <item name="android:background">@color/black_overlay</item>
         <item name="android:buttonBarStyle">?android:attr/buttonBarStyle</item>
     </style>
-    
-    <style name="spinnerItemStyle" parent="android:Widget.TextView.SpinnerItem" >
-        <item name="android:background"></item>
-        <item name="android:textSize">20dp</item>
+
+    <style name="myListPopupWindow" parent="Widget.MaterialComponents.PopupMenu.ListPopupWindow">
+        <item name="android:popupBackground">@drawable/window_background</item>
     </style>
 
-    <style name="spinnerDropDownItemStyle" parent="TextAppearance.AppCompat.Widget.TextView.SpinnerItem" >
-        <item name="android:background" ></item>
-        <item name="android:radius">20dp</item>
+    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight" >
+        <item name="listPopupWindowStyle">@style/myListPopupWindow</item>
     </style>
+
+    <style name="ipopwindow_anim_style">
+        <item name="android:windowEnterAnimation">@anim/popshow_anim</item>
+        <item name="android:windowExitAnimation">@anim/pophidden_anim</item>
+    </style>
+    
+    <style name="circular">
+        <item name="cornerSize">50%</item>
+    </style>
+
+    <style name="qrcode">
+        <item name="cornerSize">10%</item>
+    </style>
+
+
 </resources>

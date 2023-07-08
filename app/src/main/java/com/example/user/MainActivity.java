@@ -19,6 +19,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import org.json.JSONObject;
 import java.io.BufferedReader;
@@ -45,26 +46,23 @@ public class MainActivity extends AppCompatActivity {
         EditText userField = findViewById(R.id.userEditText);
         EditText passwordField = findViewById(R.id.passwordEditText);
         Button LogInBtn = findViewById(R.id.LogInBtn);
-        Button SignUpBtn = findViewById(R.id.SignUpBtn);
+        TextView SignUpBtn = findViewById(R.id.SignUpBtn);
         ImageButton psw_privacy = findViewById(R.id.psw_privacy);
         Log.d(TAG,"In main activity");
 
-        psw_privacy.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
+        psw_privacy.setOnTouchListener((v, event) -> {
 
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_UP:
-                        passwordField.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                        psw_privacy.setImageResource(R.drawable.hide);
-                        break;
-                    case MotionEvent.ACTION_DOWN:
-                        passwordField.setInputType(InputType.TYPE_CLASS_TEXT);
-                        psw_privacy.setImageResource(R.drawable.view);
-                        break;
-                }
-                return false;
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_UP:
+                    passwordField.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                    psw_privacy.setImageResource(R.drawable.hide);
+                    break;
+                case MotionEvent.ACTION_DOWN:
+                    passwordField.setInputType(InputType.TYPE_CLASS_TEXT);
+                    psw_privacy.setImageResource(R.drawable.view);
+                    break;
             }
+            return false;
         });
 
         LogInBtn.setOnClickListener(v -> {
@@ -84,9 +82,10 @@ public class MainActivity extends AppCompatActivity {
                 postData.put("phone", phone);
                 postData.put("password", password);
                 HttpPostAsyncTask task =new HttpPostAsyncTask(postData);
-                task.execute("http://172.20.10.2:8080/server-side/login.php");
+                task.execute("http://163.13.201.93/server-side/login.php");
             }
         });
+
         SignUpBtn.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, Register.class);
             startActivity(intent);
@@ -102,7 +101,6 @@ public class MainActivity extends AppCompatActivity {
                 Log.d(TAG, "postData is " + postData);
             }
         }
-
         @Override
         protected String doInBackground(String... params) {
             Log.d(TAG, "doInBackground");

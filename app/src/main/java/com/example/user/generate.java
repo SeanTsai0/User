@@ -10,6 +10,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -23,7 +24,10 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -52,16 +56,14 @@ import java.util.Map;
 
 public class generate extends Fragment {
     private RecyclerView recyclerView;
-    private TextView nullData;
+    private TextView SubTitle;
+    private FrameLayout nullGroup;
     private MyAdapter adapter;
     private ArrayList<String> mData = new ArrayList<>();
-    private ArrayList<String> orderInfo = new ArrayList<>();
+    private ArrayList<String> locationInfo = new ArrayList<>();
     private final static int DO_UPDATE_TEXT = 0, HOLD = 1;
-
     Bitmap bitmap;
-    public generate() {
-        // Required empty public constructor
-    }
+    public generate() {}
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -72,48 +74,52 @@ public class generate extends Fragment {
         postData.put("SID", SID);
 
         GetOrder getOrder = new GetOrder(postData);
-        getOrder.execute("http://172.20.10.2:8080/server-side/generate.php");
-
+        //getOrder.execute("http://172.20.10.2:8080/server-side/generate.php");
+        getOrder.execute("http://163.13.201.93/server-side/generate.php");
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_generate, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle saveInstanceState) {
         super.onViewCreated(view, saveInstanceState);
-
-        nullData = view.findViewById(R.id.nullData);
-        recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
+        nullGroup = view.findViewById(R.id.nullGroup);
+        recyclerView = view.findViewById(R.id.recyclerView);
+        SubTitle = view.findViewById(R.id.SubTitle);
     }
     private final Handler handler = new Handler(msg -> {
         final int what = msg.what;
+        Log.d("what", Integer.toString(what));
         switch (what) {
             case DO_UPDATE_TEXT:
                 doUpdate();
                 break;
             case HOLD:
+                hold();
                 break;
         }
         return false;
     });
 
+    private void hold() {
+        nullGroup.setVisibility(View.VISIBLE);
+        //nullData.setVisibility(View.VISIBLE);
+    }
+
     private void doUpdate() {
-        nullData.setVisibility(View.GONE);
         recyclerView.setVisibility(View.VISIBLE);
         adapter = new MyAdapter(mData);
+        SubTitle.setText("目前有" + mData.size() + "件包裹準備領取");
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL));
         recyclerView.setAdapter(adapter);
     }
 
     public class popupWindow extends PopupWindow implements View.OnClickListener {
-
         View view;
-        Button closeBtn;
+        ImageButton closeBtn;
         ImageView img;
 
         public popupWindow(Context context) {
@@ -121,8 +127,8 @@ public class generate extends Fragment {
             closeBtn = view.findViewById(R.id.closeBtn);
             this.setOutsideTouchable(false);
             this.setContentView(this.view);
-            this.setHeight(RelativeLayout.LayoutParams.MATCH_PARENT);
-            this.setWidth(RelativeLayout.LayoutParams.MATCH_PARENT);
+            this.setHeight(LinearLayout.LayoutParams.MATCH_PARENT);
+            this.setWidth(LinearLayout.LayoutParams.MATCH_PARENT);
             this.setBackgroundDrawable(new ColorDrawable(0xb0000000));
 
             closeBtn.setOnClickListener(this);
@@ -146,14 +152,14 @@ public class generate extends Fragment {
             private TextView order;
             ViewHolder(View itemView) {
                 super(itemView);
-                order = (TextView) itemView.findViewById(R.id.order);
+                order = itemView.findViewById(R.id.order);
 
                 itemView.setOnClickListener(v -> {
 
-                    String text = orderInfo.get(getAdapterPosition());
+                    String text = locationInfo.get(getAdapterPosition());
                     MultiFormatWriter writer = new MultiFormatWriter();
                     try {
-                        BitMatrix matrix = writer.encode(text, BarcodeFormat.QR_CODE, 400, 400);
+                        BitMatrix matrix = writer.encode(text, BarcodeFormat.QR_CODE, 700, 700);
                         BarcodeEncoder encoder = new BarcodeEncoder();
                         bitmap = encoder.createBitmap(matrix);
                     } catch (Exception e) {
@@ -236,13 +242,14 @@ public class generate extends Fragment {
 
         protected void onPostExecute(String postResult) {
             try {
+                Log.d("postRes", postResult);
                 JSONObject jsonObject = new JSONObject(postResult);
                 String status = jsonObject.getString("status");
                 if (status.equals("1")) {
                     for (int i = 0; i < jsonObject.length()-1; i++) {
                         JSONObject jsonObj = jsonObject.getJSONObject(Integer.toString(i));
                         mData.add(jsonObj.getString("item_name"));
-                        orderInfo.add(jsonObj.getString("order_id"));
+                        locationInfo.add(jsonObj.getString("location_id"));
                     }
                     handler.sendEmptyMessage(DO_UPDATE_TEXT);
                     Log.d("Debug", "" + mData);

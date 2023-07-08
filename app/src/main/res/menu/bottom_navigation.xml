@@ -2,12 +2,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/generate"
-        android:title="產生取貨條碼"
+        android:title="取貨條碼"
         android:icon="@drawable/scanner" />
     <item
         android:id="@+id/information"
         android:title="用戶資訊"
-        android:icon="@drawable/user"/>
+        android:icon="@drawable/person"/>
     <item
         android:id="@+id/record"
         android:title="取貨記錄"
@@ -15,5 +15,5 @@
     <item
         android:id="@+id/signOut"
         android:title="登出"
-        android:icon="@drawable/exit"/>
+        android:icon="@drawable/exit" />
 </menu>
