@@ -95,6 +95,40 @@
 
             </LinearLayout>
 
+            <RadioGroup
+                android:id="@+id/IdentifyGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="選擇註冊身分"
+                    android:gravity="center"
+                    android:paddingHorizontal="5dp"
+                    android:layout_marginHorizontal="10dp"
+                    android:textColor="@color/black"/>
+
+                <RadioButton
+                    android:id="@+id/buyerRadioBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="買家帳號"
+                    android:paddingHorizontal="5dp"
+                    android:checked="true"/>
+
+                <RadioButton
+                    android:id="@+id/sellerRadioBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:paddingHorizontal="5dp"
+                    android:text="賣家帳號" />
+
+            </RadioGroup>
+
             <LinearLayout
                 android:id="@+id/name_group"
                 android:layout_width="match_parent"

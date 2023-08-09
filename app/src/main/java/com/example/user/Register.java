@@ -39,6 +39,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -68,8 +69,8 @@ public class Register extends AppCompatActivity {
     private static String TAG = "Register";
     public static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 101;
     static ImageView photo;
-
     Calendar calendar;
+    String signup_type = "1";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,6 +92,7 @@ public class Register extends AppCompatActivity {
         TextView pickerBtn = findViewById(R.id.pickerBtn);
         TextView loginBtn = findViewById(R.id.LogInBtn);
         photo = findViewById(R.id.photo);
+        RadioGroup IdentifyGroup = findViewById(R.id.IdentifyGroup);
 
         arrow_back.setOnClickListener(v -> finish());
 
@@ -100,6 +102,14 @@ public class Register extends AppCompatActivity {
              if(checkAndRequestPermissions(this)){
                 chooseImage(this);
              }
+        });
+
+        IdentifyGroup.setOnCheckedChangeListener((group, checkedId) -> {
+            if(checkedId == R.id.buyerRadioBtn) {
+                signup_type = "1";
+            } else {
+                signup_type = "2";
+            }
         });
 
         datePicker = (view, year, month, dayOfMonth) -> {
@@ -147,6 +157,7 @@ public class Register extends AppCompatActivity {
                 postData.put("password", password);
                 postData.put("email", email);
                 postData.put("birth", birth);
+                postData.put("identify", signup_type);
 
                 Bitmap imageBitmap = ((BitmapDrawable) photo.getDrawable()).getBitmap();
                 ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();

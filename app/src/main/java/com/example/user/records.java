@@ -59,7 +59,6 @@ public class records extends Fragment {
         postData.put("SID", SID);
 
         GetOrder getOrder = new GetOrder(postData);
-        //getOrder.execute("http://172.20.10.2:8080/server-side/order.php");
         getOrder.execute("http://163.13.201.93/server-side/order.php");
     }
 
@@ -189,7 +188,7 @@ public class records extends Fragment {
                     for (int i = 0; i < jsonObject.length()-1; i++) {
                         HashMap<String, String> info = new HashMap<>();
                         JSONObject jsonObj = jsonObject.getJSONObject(Integer.toString(i));
-                        Log.d("result", "jsonObj = " + jsonObj.toString());
+                        Log.d("result", "jsonObj = " + jsonObj);
                         mData.add(jsonObj.getString("item_name"));
                         info.put("item_name", jsonObj.getString("item_name"));
                         info.put("item_price", jsonObj.getString("item_price"));

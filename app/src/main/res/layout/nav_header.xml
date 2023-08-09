@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="150dp"
+    android:background="#D7C0AE">
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/seller_img"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_margin="20dp"
+        android:adjustViewBounds="false"
+        android:src="@drawable/mail_with_color"
+        android:scaleType="centerCrop"
+        android:layout_gravity="center"
+        app:shapeAppearance="@style/circular"/>
+
+    <TextView
+        android:id="@+id/seller_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="seller name"
+        android:layout_gravity="bottom"
+        android:textSize="25dp"
+        android:gravity="start"
+        android:paddingStart="10dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:layout_marginVertical="10dp"/>
+
+</LinearLayout>

@@ -19,6 +19,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import org.json.JSONObject;
@@ -34,6 +35,7 @@ import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
     static String TAG = "MainActivity";
+    String identify = "1";
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -48,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
         Button LogInBtn = findViewById(R.id.LogInBtn);
         TextView SignUpBtn = findViewById(R.id.SignUpBtn);
         ImageButton psw_privacy = findViewById(R.id.psw_privacy);
+        RadioGroup IdentifyGroup = findViewById(R.id.IdentifyGroup);
         Log.d(TAG,"In main activity");
 
         psw_privacy.setOnTouchListener((v, event) -> {
@@ -63,6 +66,14 @@ public class MainActivity extends AppCompatActivity {
                     break;
             }
             return false;
+        });
+
+        IdentifyGroup.setOnCheckedChangeListener((group, checkedId) -> {
+            if (checkedId == R.id.buyerRadioBtn) {
+                identify = "1";
+            } else {
+                identify = "2";
+            }
         });
 
         LogInBtn.setOnClickListener(v -> {
@@ -150,10 +161,21 @@ public class MainActivity extends AppCompatActivity {
                 switch (status) {
                     case "1":
                         String SID = jsonObject.getString("SID");
+                        String login_type = jsonObject.getString("identify");
                         SharedPreferences sharedPreferences = getSharedPreferences("sharePreferences", MODE_PRIVATE);
                         sharedPreferences.edit().putString("SID", SID).apply();
-                        Intent intent = new Intent(MainActivity.this, UserInterface.class);
-                        startActivity(intent);
+
+                        if (identify.equals("1") && login_type.equals("1")) {
+                            Intent intent = new Intent(MainActivity.this, UserInterface.class);
+                            startActivity(intent);
+                        } else if (identify.equals("2") && login_type.equals("2")) {
+                            Intent intent = new Intent(MainActivity.this, SellerInterface.class);
+                            startActivity(intent);
+                        } else {
+                            new AlertDialog.Builder(MainActivity.this)
+                                    .setTitle("登入身分錯誤")
+                                    .setMessage("你登入的帳號身分似乎選擇錯誤。請檢查登入身分，然後再試一次。").show();
+                        }
                         break;
                     case "-1":
                         new AlertDialog.Builder(MainActivity.this)

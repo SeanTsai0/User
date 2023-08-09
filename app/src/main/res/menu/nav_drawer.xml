@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group
+        android:checkableBehavior="single"
+        android:id="@+id/group1">
+        <item
+            android:id="@+id/ship_record"
+            android:icon="@drawable/record"
+            android:title="出貨紀錄"/>
+        <item
+            android:id="@+id/my_product"
+            android:icon="@drawable/lable"
+            android:title="我的商品"/>
+        <item
+            android:id="@+id/seller_info"
+            android:icon="@drawable/seller"
+            android:title="個人資訊" />
+    </group>
+    <group
+        android:checkableBehavior="single"
+        android:id="@+id/group2">
+        <item
+            android:id="@+id/logout"
+            android:icon="@drawable/exit"
+            android:title="登出帳號"/>
+    </group>
+</menu>
