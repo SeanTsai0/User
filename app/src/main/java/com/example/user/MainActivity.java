@@ -1,35 +1,22 @@
 package com.example.user;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.media.Image;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.InputType;
 import android.text.TextUtils;
-import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.MotionEvent;
-import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-
+import androidx.appcompat.app.AppCompatActivity;
 import org.json.JSONObject;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -92,8 +79,8 @@ public class MainActivity extends AppCompatActivity {
                 Map<String, String> postData = new HashMap<>();
                 postData.put("phone", phone);
                 postData.put("password", password);
-                HttpPostAsyncTask task =new HttpPostAsyncTask(postData);
-                task.execute("http://163.13.201.93/server-side/login.php");
+                SignInRequest signInRequest =new SignInRequest(postData);
+                signInRequest.execute("http://163.13.201.93/server-side/login.php");
             }
         });
 
@@ -102,55 +89,12 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         });
     }
-
-    protected class HttpPostAsyncTask extends AsyncTask<String, Void, String> {
-        JSONObject postData;
-
-        public HttpPostAsyncTask(Map<String, String> postData) {
-            if (postData != null) {
-                this.postData = new JSONObject(postData);
-                Log.d(TAG, "postData is " + postData);
-            }
+    protected class SignInRequest extends Http{
+        public SignInRequest(Map<String, String> postData) {
+            super(postData);
         }
+
         @Override
-        protected String doInBackground(String... params) {
-            Log.d(TAG, "doInBackground");
-            StringBuilder response = new StringBuilder();
-            URL url;
-            HttpURLConnection urlConnection;
-            try {
-                url = new URL(params[0]);
-                urlConnection = (HttpURLConnection) url.openConnection();
-                urlConnection.setDoOutput(true);
-                urlConnection.setDoInput(true);
-                urlConnection.setUseCaches(false);
-                urlConnection.setRequestProperty("Content-Type", "application/json");
-                urlConnection.setRequestMethod("POST");
-                if (this.postData != null) {
-                    OutputStreamWriter writer = new OutputStreamWriter(urlConnection.getOutputStream());
-                    writer.write(postData.toString());
-                    writer.flush();
-                }
-                int responseCode = urlConnection.getResponseCode();
-                Log.d(TAG, "response code is " + responseCode);
-
-                if (responseCode == HttpURLConnection.HTTP_OK) {
-                    BufferedReader reader= new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), StandardCharsets.UTF_8));
-                    String line;
-                    try {
-                        while((line = reader.readLine()) != null) {
-                            response.append(line);
-                        }
-                    } catch (IOException e) {
-                        Log.e(TAG,e.getMessage());
-                    }
-                }
-            } catch (Exception e) {
-                Log.e(TAG, e.getMessage());
-            }
-            return response.toString();
-        }
-
         protected void onPostExecute(String postResult) {
             try {
                 Log.d(TAG, "post result = " + postResult);

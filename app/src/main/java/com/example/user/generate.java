@@ -1,31 +1,18 @@
 package com.example.user;
 
 import static android.content.Context.MODE_PRIVATE;
-
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.ColorDrawable;
-import android.media.Image;
-import android.os.AsyncTask;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -34,42 +21,30 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.common.BitMatrix;
-import com.google.zxing.oned.MultiFormatOneDReader;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
-
-import org.json.JSONArray;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
-
-import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
-import java.security.Timestamp;
 import java.util.ArrayList;
 import java.util.Base64;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Timer;
 
 public class generate extends Fragment {
+    private final static int DO_UPDATE_TEXT = 0, HOLD = 1;
     private RecyclerView recyclerView;
     private TextView SubTitle;
     private FrameLayout nullGroup;
-    private MyAdapter adapter;
     private ArrayList<String> mData = new ArrayList<>();
     private ArrayList<String> locationInfo = new ArrayList<>();
     private ArrayList<Bitmap> mImg = new ArrayList<>();
@@ -77,7 +52,6 @@ public class generate extends Fragment {
     private ArrayList<String> mAddress = new ArrayList<>();
     private ArrayList<String> mPrice = new ArrayList<>();
     private ArrayList<String> mAmount = new ArrayList<>();
-    private final static int DO_UPDATE_TEXT = 0, HOLD = 1;
     Bitmap bitmap;
     public generate() {}
 
@@ -86,11 +60,11 @@ public class generate extends Fragment {
         super.onCreate(savedInstanceState);
 
         Map<String, String> postData = new HashMap<>();
-        String SID = this.getActivity().getSharedPreferences("sharePreferences", MODE_PRIVATE).getString("SID", "null");
+        String SID = this.getActivity().getSharedPreferences("sharePreferences", MODE_PRIVATE).getString("SID", null);
         postData.put("SID", SID);
 
-        GetOrder getOrder = new GetOrder(postData);
-        getOrder.execute("http://163.13.201.93/server-side/generate.php");
+        GetUserOrder getUserOrder = new GetUserOrder(postData);
+        getUserOrder.execute("http://163.13.201.93/server-side/generate.php");
     }
 
     @Override
@@ -121,12 +95,11 @@ public class generate extends Fragment {
 
     private void hold() {
         nullGroup.setVisibility(View.VISIBLE);
-        //nullData.setVisibility(View.VISIBLE);
     }
 
     private void doUpdate() {
         recyclerView.setVisibility(View.VISIBLE);
-        adapter = new MyAdapter(mData);
+        MyAdapter adapter = new MyAdapter(mData);
         SubTitle.setText("目前有" + mData.size() + "件包裹準備領取");
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(adapter);
@@ -240,57 +213,12 @@ public class generate extends Fragment {
         }
     }
 
-    protected class GetOrder extends AsyncTask<String, Void, String> {
-        JSONObject postData;
-
-        public GetOrder(Map<String, String> postData) {
-            if (postData != null) {
-                this.postData = new JSONObject(postData);
-            }
+    protected class GetUserOrder extends Http{
+        public GetUserOrder(Map<String, String> postData){
+            super(postData);
         }
 
         @Override
-        protected String doInBackground(String... params) {
-            StringBuilder response = new StringBuilder();
-            URL url;
-            HttpURLConnection urlConnection;
-
-            try {
-                url = new URL(params[0]);
-                urlConnection = (HttpURLConnection) url.openConnection();
-
-                urlConnection.setDoInput(true);
-                urlConnection.setDoOutput(true);
-                urlConnection.setUseCaches(false);
-
-                urlConnection.setRequestProperty("Content-Type", "application/json");
-                urlConnection.setRequestMethod("POST");
-
-                if (this.postData != null) {
-                    OutputStreamWriter writer = new OutputStreamWriter(urlConnection.getOutputStream());
-                    writer.write(postData.toString());
-                    writer.flush();
-                }
-
-                int responseCode = urlConnection.getResponseCode();
-
-                if (responseCode == HttpURLConnection.HTTP_OK) {
-                    BufferedReader reader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), StandardCharsets.UTF_8));
-                    String line;
-                    try {
-                        while ((line = reader.readLine()) != null) {
-                            response.append(line);
-                        }
-                    } catch(Exception e) {
-                        Log.e("Debug", e.getMessage());
-                    }
-                }
-            } catch (Exception e) {
-                Log.e("Debug", e.getMessage());
-            }
-            return response.toString();
-        }
-
         protected void onPostExecute(String postResult) {
             try {
                 Log.d("postRes", postResult);
@@ -319,5 +247,4 @@ public class generate extends Fragment {
             }
         }
     }
-
 }

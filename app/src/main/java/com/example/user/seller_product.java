@@ -1,37 +1,26 @@
 package com.example.user;
 
 import static android.content.Context.MODE_PRIVATE;
-
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.widget.ContentLoadingProgressBar;
-import androidx.fragment.app.Fragment;
-
 import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
-
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.Fragment;
 import org.json.JSONObject;
-
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -118,7 +107,6 @@ public class seller_product extends Fragment {
             }
         }
     }
-
     private final Handler handler = new Handler(msg -> {
         final int what = msg.what;
         switch (what) {
@@ -130,7 +118,6 @@ public class seller_product extends Fragment {
         }
         return false;
     });
-
     private void doUpdate() {
         gridViewAdapter = new GridViewAdapter(getActivity(), bitmapArrayList);
         gridView.setAdapter(gridViewAdapter);
@@ -140,8 +127,6 @@ public class seller_product extends Fragment {
         progressBar.setVisibility(View.GONE);
 
     }
-
-
     public class GridViewAdapter extends BaseAdapter
     {
         private LayoutInflater mLayoutInflater;
@@ -168,9 +153,7 @@ public class seller_product extends Fragment {
         }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent)
-        {
-            //設定與回傳 convertView 作為顯示在這個 position 位置的 Item 的 View。
+        public View getView(int position, View convertView, ViewGroup parent){
             View v = mLayoutInflater.inflate(R.layout.seller_product_gridview, parent, false);
 
             ImageView product_thumbnail = v.findViewById(R.id.product_thumbnail);
@@ -179,10 +162,10 @@ public class seller_product extends Fragment {
             product_thumbnail.setImageBitmap(mItemList.get(position));
             thumbnail_title.setText(titleArrayList.get(position));
 
-
             product_thumbnail.setOnClickListener(v1 -> {
                 Bundle bundle = new Bundle();
                 bundle.putString("product_id", IDArrayList.get(position));
+                bundle.putString("tag", "seller_product");
                 getParentFragmentManager().setFragmentResult("requestKey", bundle);
 
                 getActivity().getSupportFragmentManager()

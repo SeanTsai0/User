@@ -1,68 +1,36 @@
 package com.example.user;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultCaller;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.PickVisualMediaRequest;
-import androidx.activity.result.contract.ActivityResultContract;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
 import android.app.Activity;
 import android.app.DatePickerDialog;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
-import android.view.View;
-import android.view.Window;
 import android.view.WindowManager;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RadioGroup;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.github.dhaval2404.imagepicker.ImagePicker;
-import com.github.dhaval2404.imagepicker.ImagePickerActivity;
-
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import org.json.JSONObject;
-import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 public class Register extends AppCompatActivity {
@@ -167,9 +135,8 @@ public class Register extends AppCompatActivity {
                 postData.put("img", base64String);
 
                 Log.d("base64", "sign up button");
-                HttpInsertAsyncTask task = new HttpInsertAsyncTask(postData);
-//                task.execute("http://172.20.10.2:8080/server-side/insert.php");
-                task.execute("http://163.13.201.93/server-side/insert.php");
+                SignUpAccount sign = new SignUpAccount(postData);
+                sign.execute("http://163.13.201.93/server-side/insert.php");
             }
         });
     }
@@ -251,60 +218,10 @@ public class Register extends AppCompatActivity {
             }
         }
     }
-
-    protected class HttpInsertAsyncTask extends AsyncTask<String, Void, String> {
-        JSONObject postData;
-
-        public HttpInsertAsyncTask(Map<String, String> postData) {
-            if (postData != null) {
-                this.postData = new JSONObject(postData);
-            }
-        }
+    protected class SignUpAccount extends Http{
+        public SignUpAccount(Map<String, String> postData){super(postData);}
 
         @Override
-        protected String doInBackground(String... params) {
-            StringBuilder response = new StringBuilder();
-            URL url;
-            HttpURLConnection urlConnection;
-
-            try {
-                url = new URL(params[0]);
-                urlConnection = (HttpURLConnection) url.openConnection();
-
-                urlConnection.setDoOutput(true);
-                urlConnection.setDoInput(true);
-                urlConnection.setUseCaches(false);
-
-                urlConnection.setRequestProperty("Content-Type", "application/json");
-                urlConnection.setRequestMethod("POST");
-
-                if (this.postData != null) {
-                    OutputStreamWriter writer = new OutputStreamWriter(urlConnection.getOutputStream());
-                    writer.write(postData.toString());
-                    writer.flush();
-                }
-                int responseCode = urlConnection.getResponseCode();
-                Log.d("base64", "response code : " + responseCode);
-
-                if (responseCode == HttpURLConnection.HTTP_OK) {
-
-                    BufferedReader reader= new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), StandardCharsets.UTF_8));
-                    String line;
-                    try {
-                        while((line = reader.readLine()) != null) {
-                            response.append(line);
-                        }
-
-                    } catch (IOException e) {
-                        Log.e("error",e.getMessage());
-                    }
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return response.toString();
-        }
-
         protected void onPostExecute(String postResult) {
             Log.d("base64", "post result = " + postResult);
             try {

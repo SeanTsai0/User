@@ -1,36 +1,26 @@
 package com.example.user;
 
 import static android.content.Context.MODE_PRIVATE;
-
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
-
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.util.Base64;
 import java.util.HashMap;
@@ -43,6 +33,8 @@ public class sellerInformation extends Fragment {
             seller_profile_phone, seller_profile_email, seller_profile_birth,
             seller_profile_trade_amount, total_profit, seller_profile_shipping_product;
     private Button modify_seller_informationBtn;
+    private ScrollView seller_information_scrollView;
+    private ProgressBar progressBar;
     public sellerInformation() {
         // Required empty public constructor
     }
@@ -57,11 +49,11 @@ public class sellerInformation extends Fragment {
 
         GetSellerInformation getSellerInformation = new GetSellerInformation(postData);
         getSellerInformation.execute("http://163.13.201.93/server-side/seller/sellerInformation.php");
-
-
     }
 
     private void component(View view) {
+        progressBar = view.findViewById(R.id.progressBar);
+        seller_information_scrollView = view.findViewById(R.id.seller_information_scrollView);
         seller_profile_image = view.findViewById(R.id.seller_profile_image);
         seller_profile_name = view.findViewById(R.id.seller_profile_name);
         seller_profile_product_amount = view.findViewById(R.id.seller_profile_product_amount);
@@ -117,6 +109,8 @@ public class sellerInformation extends Fragment {
                 seller_profile_trade_amount.setText(jsonObject.getString("order_amount"));
                 total_profit.setText(jsonObject.getString("total"));
                 seller_profile_shipping_product.setText(jsonObject.getString("shipping"));
+                progressBar.setVisibility(View.GONE);
+                seller_information_scrollView.setVisibility(View.VISIBLE);
             } catch (JSONException e) {
                 throw new RuntimeException(e);
             }

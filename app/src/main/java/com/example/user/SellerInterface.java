@@ -1,11 +1,5 @@
 package com.example.user;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.drawerlayout.widget.DrawerLayout;
-
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -13,15 +7,17 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.HeaderViewListAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.drawerlayout.widget.DrawerLayout;
 import com.google.android.material.navigation.NavigationView;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.Base64;
@@ -80,7 +76,7 @@ public class SellerInterface extends AppCompatActivity {
                             drawerLayout.close();
                             return true;
                         case R.id.logout:
-                            finish();
+                            dialog();
                             return true;
                     }
                     return false;
@@ -88,13 +84,20 @@ public class SellerInterface extends AppCompatActivity {
 
         navigationView.setNavigationItemSelectedListener(itemSelectedListener);
 
-
         Map<String, String> postData = new HashMap<>();
         String SID = getSharedPreferences("sharePreferences", MODE_PRIVATE).getString("SID", "null");
         postData.put("SID", SID);
         req http = new req(postData);
         http.execute("http://163.13.201.93/server-side/record.php");
     }
+    private void dialog() {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+        dialog.setMessage("是否確定要登出?");
+        dialog.setPositiveButton("確認", (dialog1, which) -> finish());
+        dialog.setNegativeButton("取消", (dialog12, which) -> {});
+        dialog.show();
+    }
+
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 

@@ -3,26 +3,20 @@ package com.example.user;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentResultListener;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
-
+import androidx.activity.OnBackPressedCallback;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
-
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.Base64;
@@ -35,9 +29,10 @@ public class product_detail extends Fragment {
     private ImageView closeFragment;
     private TextView product_name, product_price, sub_product_name, sub_product_price, product_scale, packing_type, product_detail;
     private ImageView product_picture;
-    private FrameLayout fragment_product_detail;
+    private String tag;
     private ScrollView scrollView;
     private ProgressBar progressBar;
+
 
     public product_detail() {
         // Required empty public constructor
@@ -45,7 +40,6 @@ public class product_detail extends Fragment {
 
     private void component(View view) {
         progressBar = view.findViewById(R.id.progressBar);
-        fragment_product_detail = view.findViewById(R.id.fragment_product_detail);
         scrollView = view.findViewById(R.id.scrollView);
         closeFragment = view.findViewById(R.id.closeFragment);
         product_picture = view.findViewById(R.id.product_picture);
@@ -64,11 +58,40 @@ public class product_detail extends Fragment {
 
         getParentFragmentManager().setFragmentResultListener("requestKey", this, (requestKey, result) -> {
             String bundleKey = result.getString("product_id");
+            tag = result.getString("tag");
 
             Map<String, String> postData = new HashMap<>();
             postData.put("product_id", bundleKey);
             getDetailProduct getDetailProduct = new getDetailProduct(postData);
             getDetailProduct.execute("http://163.13.201.93/server-side/seller/getDetailProduct.php");
+            // This callback will only be called when MyFragment is at least Started.
+            OnBackPressedCallback callback = new OnBackPressedCallback(false /* enabled by default */) {
+                @Override
+                public void handleOnBackPressed() {
+                    // Handle the back button event
+                    getFragmentManager().popBackStack();
+                    Bundle bundle;
+                    switch (tag){
+                        case "ship_product_completed":
+                            bundle = new Bundle();
+                            bundle.putString("status", "completed");
+                            getParentFragmentManager().setFragmentResult("backKey", bundle);
+                            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment, new ship_product()).commit();
+                            break;
+                        case "ship_product_uncompleted":
+                            bundle = new Bundle();
+                            bundle.putString("status", "uncompleted");
+                            getParentFragmentManager().setFragmentResult("backKey", bundle);
+                            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment, new ship_product()).commit();
+                            break;
+                        case "seller_product":
+                            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment, new seller_product()).commit();
+                            break;
+                    }
+                }
+            };
+            requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
+            callback.setEnabled(true);
         });
     }
 
@@ -86,7 +109,26 @@ public class product_detail extends Fragment {
 
         closeFragment.setOnClickListener(v -> {
             getFragmentManager().popBackStack();
-            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment, new seller_product()).commit();
+            Bundle bundle;
+            switch (tag){
+                case "ship_product_uncompleted":
+                    bundle = new Bundle();
+                    bundle.putString("status", "uncompleted");
+                    getParentFragmentManager().setFragmentResult("backKey", bundle);
+                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment, new ship_product()).commit();
+                    Log.d(TAG, bundle.toString());
+                    break;
+                case "ship_product_completed":
+                    bundle = new Bundle();
+                    bundle.putString("status", "completed");
+                    getParentFragmentManager().setFragmentResult("backKey", bundle);
+                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment, new ship_product()).commit();
+                    Log.d(TAG, bundle.toString());
+                    break;
+                case "seller_product":
+                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment, new seller_product()).commit();
+                    break;
+            }
         });
     }
 
