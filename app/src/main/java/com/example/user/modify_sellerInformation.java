@@ -126,6 +126,7 @@ public class modify_sellerInformation extends AppCompatActivity{
                 Log.d(TAG, postResult);
                 if (status.equals("1")) {
                     Toast.makeText(modify_sellerInformation.this, "修改成功", Toast.LENGTH_SHORT).show();
+                    finish();
                     Intent intent = new Intent(modify_sellerInformation.this, SellerInterface.class);
                     startActivity(intent);
                 } else if (status.equals("-1")){

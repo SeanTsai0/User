@@ -14,7 +14,7 @@
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
-        android:label="Intelligent Storage"
+        android:label="智取達"
         android:supportsRtl="true"
         android:theme="@style/Theme.User"
         android:usesCleartextTraffic="true"

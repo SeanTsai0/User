@@ -1,5 +1,6 @@
 package com.example.user;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -93,9 +94,14 @@ public class SellerInterface extends AppCompatActivity {
     private void dialog() {
         AlertDialog.Builder dialog = new AlertDialog.Builder(this);
         dialog.setMessage("是否確定要登出?");
-        dialog.setPositiveButton("確認", (dialog1, which) -> finish());
+        dialog.setPositiveButton("確認", (dialog1, which) -> intent());
         dialog.setNegativeButton("取消", (dialog12, which) -> {});
         dialog.show();
+    }
+    private void intent(){
+        Intent intent = new Intent(SellerInterface.this, MainActivity.class);
+        startActivity(intent);
+        this.finish();
     }
 
     @Override

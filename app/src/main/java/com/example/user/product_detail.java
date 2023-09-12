@@ -1,16 +1,30 @@
 package com.example.user;
 
+import static android.view.KeyEvent.ACTION_DOWN;
+import static android.view.MotionEvent.ACTION_MOVE;
+
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.MediaController;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.VideoView;
+
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -32,7 +46,8 @@ public class product_detail extends Fragment {
     private String tag;
     private ScrollView scrollView;
     private ProgressBar progressBar;
-
+    private VideoView videoView;
+    String videoUrl = "http://163.13.201.93/server-side/seller/item_img/51709F0D-D134-4677-9191-C7DC0B723476-91335-0000ACFBCB09FDB4_AdobeExpress.mp4";
 
     public product_detail() {
         // Required empty public constructor
@@ -50,6 +65,7 @@ public class product_detail extends Fragment {
         product_scale = view.findViewById(R.id.product_scale);
         packing_type = view.findViewById(R.id.packing_type);
         product_detail = view.findViewById(R.id.product_detail);
+        videoView = view.findViewById(R.id.videoView);
     }
 
     @Override
@@ -64,6 +80,12 @@ public class product_detail extends Fragment {
             postData.put("product_id", bundleKey);
             getDetailProduct getDetailProduct = new getDetailProduct(postData);
             getDetailProduct.execute("http://163.13.201.93/server-side/seller/getDetailProduct.php");
+
+            Uri uri = Uri.parse(videoUrl);
+            videoView.setVideoURI(uri); // sets the resource from the videoUrl to the videoView
+            videoView.setOnPreparedListener(mp -> mp.setLooping(true));
+            videoView.start(); // starts the video
+
             // This callback will only be called when MyFragment is at least Started.
             OnBackPressedCallback callback = new OnBackPressedCallback(false /* enabled by default */) {
                 @Override
@@ -106,6 +128,14 @@ public class product_detail extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle saveInstanceState) {
         super.onViewCreated(view, saveInstanceState);
         component(view);
+
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int width = displayMetrics.widthPixels;
+        product_picture.getLayoutParams().width = width;
+        videoView.getLayoutParams().width = width;
+        product_picture.requestLayout();
+        videoView.requestLayout();
 
         closeFragment.setOnClickListener(v -> {
             getFragmentManager().popBackStack();

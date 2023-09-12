@@ -21,9 +21,11 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -52,6 +54,8 @@ public class generate extends Fragment {
     private ArrayList<String> mAddress = new ArrayList<>();
     private ArrayList<String> mPrice = new ArrayList<>();
     private ArrayList<String> mAmount = new ArrayList<>();
+    private NestedScrollView scrollView;
+    private ProgressBar progressBar;
     Bitmap bitmap;
     public generate() {}
 
@@ -78,6 +82,8 @@ public class generate extends Fragment {
         nullGroup = view.findViewById(R.id.nullGroup);
         recyclerView = view.findViewById(R.id.recyclerView);
         SubTitle = view.findViewById(R.id.SubTitle);
+        scrollView = view.findViewById(R.id.scrollView);
+        progressBar = view.findViewById(R.id.progressBar);
     }
     private final Handler handler = new Handler(msg -> {
         final int what = msg.what;
@@ -94,13 +100,18 @@ public class generate extends Fragment {
     });
 
     private void hold() {
+        progressBar.setVisibility(View.GONE);
         nullGroup.setVisibility(View.VISIBLE);
+        SubTitle.setVisibility(View.VISIBLE);
     }
 
     private void doUpdate() {
+        progressBar.setVisibility(View.GONE);
+        scrollView.setVisibility(View.VISIBLE);
         recyclerView.setVisibility(View.VISIBLE);
         MyAdapter adapter = new MyAdapter(mData);
         SubTitle.setText("目前有" + mData.size() + "件包裹準備領取");
+        SubTitle.setVisibility(View.VISIBLE);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(adapter);
     }

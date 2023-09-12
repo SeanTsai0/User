@@ -308,6 +308,7 @@ public class ship_product extends Fragment {
         }
         @Override
         protected void onPostExecute(String postResult){
+            Log.d(TAG, postResult);
             mData = new ArrayList<>();
             mImg = new ArrayList<>();
             mDate = new ArrayList<>();

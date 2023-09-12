@@ -15,6 +15,8 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 import org.json.JSONObject;
 import java.util.HashMap;
@@ -88,6 +90,15 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(MainActivity.this, Register.class);
             startActivity(intent);
         });
+        OnBackPressedCallback callback = new OnBackPressedCallback(false /* enabled by default */) {
+            @Override
+            public void handleOnBackPressed() {
+                // Handle the back button event
+                finishAndRemoveTask();
+            }
+        };
+        getOnBackPressedDispatcher().addCallback(this, callback);
+        callback.setEnabled(true);
     }
     protected class SignInRequest extends Http{
         public SignInRequest(Map<String, String> postData) {

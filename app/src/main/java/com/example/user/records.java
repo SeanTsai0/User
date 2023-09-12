@@ -2,25 +2,41 @@ package com.example.user;
 
 import static android.content.Context.MODE_PRIVATE;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.PopupWindow;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.VideoView;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SwitchCompat;
+import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import org.json.JSONObject;
+
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,9 +47,13 @@ public class records extends Fragment {
     private RecyclerView recyclerView;
     private ArrayList<String> mData = new ArrayList<>();
     private ArrayList<HashMap<String, String>> childData = new ArrayList<>();
+    private ArrayList<Bitmap> imageList = new ArrayList<>();
     private Recycler_Adapter recycler_adapter;
     private TextView SubTitle;
     private FrameLayout nullGroup;
+    private ProgressBar progressBar;
+    private NestedScrollView scrollView;
+    String videoUrl = "http://163.13.201.93/server-side/seller/item_img/51709F0D-D134-4677-9191-C7DC0B723476-91335-0000ACFBCB09FDB4_AdobeExpress.mp4";
 
     public records() {}
 
@@ -57,6 +77,8 @@ public class records extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle saveInstanceState) {
         super.onViewCreated(view, saveInstanceState);
+        progressBar = view.findViewById(R.id.progressBar);
+        scrollView = view.findViewById(R.id.scrollView);
         nullGroup = view.findViewById(R.id.nullGroup);
         recyclerView = view.findViewById(R.id.recyclerView);
         SubTitle = view.findViewById(R.id.SubTitle);
@@ -76,14 +98,18 @@ public class records extends Fragment {
     });
 
     private void hold() {
+        progressBar.setVisibility(View.GONE);
         nullGroup.setVisibility(View.VISIBLE);
-        //nullData.setVisibility(View.VISIBLE);
+        SubTitle.setVisibility(View.VISIBLE);
     }
 
     private void doUpdate() {
+        progressBar.setVisibility(View.GONE);
+        scrollView.setVisibility(View.VISIBLE);
         recyclerView.setVisibility(View.VISIBLE);
         recycler_adapter = new Recycler_Adapter(mData);
         SubTitle.setText("您有" + mData.size() + "筆取貨記錄");
+        SubTitle.setVisibility(View.VISIBLE);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(recycler_adapter);
     }
@@ -91,10 +117,31 @@ public class records extends Fragment {
     public class popupWindow extends PopupWindow implements View.OnClickListener {
         View view;
         ImageButton close;
+        SwitchCompat switcher;
+        VideoView videoView;
+        ImageView package_img;
 
         public popupWindow(Context context) {
             this.view = LayoutInflater.from(context).inflate(R.layout.detail_record, null);
+
             close = view.findViewById(R.id.close);
+            videoView = view.findViewById(R.id.videoView);
+            switcher = view.findViewById(R.id.switcher);
+            package_img = view.findViewById(R.id.package_img);
+
+            switcher.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                if (isChecked) {
+                    Uri uri = Uri.parse(videoUrl);
+                    videoView.setVideoURI(uri); // sets the resource from the videoUrl to the videoView
+                    videoView.setOnPreparedListener(mp -> mp.setLooping(true));
+                    videoView.start(); // starts the video
+                    package_img.setVisibility(View.GONE);
+                    videoView.setVisibility(View.VISIBLE);
+                } else {
+                    package_img.setVisibility(View.VISIBLE);
+                    videoView.setVisibility(View.GONE);
+                }
+            });
             this.setOutsideTouchable(true);
             this.setContentView(this.view);
             this.setHeight(RelativeLayout.LayoutParams.WRAP_CONTENT);
@@ -113,6 +160,7 @@ public class records extends Fragment {
     protected class Recycler_Adapter extends RecyclerView.Adapter<Recycler_Adapter.ViewHolder> {
         private List<String> mData;
         TextView item_name, item_price, arrived_date, pick_up_date, location;
+        ImageView package_img;
 
         Recycler_Adapter(List<String> data) {
             mData = data;
@@ -120,9 +168,11 @@ public class records extends Fragment {
 
         class ViewHolder extends RecyclerView.ViewHolder{
             private TextView row_index_key;
+            private ImageView row_index_image;
             ViewHolder(View itemView) {
                 super(itemView);
                 row_index_key = itemView.findViewById(R.id.row_index_key);
+                row_index_image = itemView.findViewById(R.id.row_index_image);
 
                 itemView.setOnClickListener(v -> {
                     popupWindow popupWindow = new popupWindow(getActivity());
@@ -132,12 +182,14 @@ public class records extends Fragment {
                     arrived_date = popupWindow.view.findViewById(R.id.arrived_date);
                     pick_up_date = popupWindow.view.findViewById(R.id.pick_up_date);
                     location = popupWindow.view.findViewById(R.id.location);
+                    package_img = popupWindow.view.findViewById(R.id.package_img);
 
                     item_name.setText(childData.get(getAdapterPosition()).get("item_name"));
-                    item_price.setText("$" + childData.get(getAdapterPosition()).get("item_price"));
+                    item_price.setText(childData.get(getAdapterPosition()).get("item_price"));
                     arrived_date.setText(childData.get(getAdapterPosition()).get("arrived_date"));
                     pick_up_date.setText(childData.get(getAdapterPosition()).get("pick_up_date"));
                     location.setText(childData.get(getAdapterPosition()).get("pick_up_location"));
+                    package_img.setImageBitmap(imageList.get(getAdapterPosition()));
 
                     popupWindow.showAtLocation(view, Gravity.BOTTOM, 0, 50);
                 });
@@ -153,6 +205,7 @@ public class records extends Fragment {
         @Override
         public void onBindViewHolder(ViewHolder holder, int position) {
             holder.row_index_key.setText(mData.get(position));
+            holder.row_index_image.setImageBitmap(imageList.get(position));
         }
 
         @Override
@@ -177,6 +230,9 @@ public class records extends Fragment {
                         JSONObject jsonObj = jsonObject.getJSONObject(Integer.toString(i));
                         Log.d("result", "jsonObj = " + jsonObj);
                         mData.add(jsonObj.getString("item_name"));
+                        byte[] decodeString = Base64.getDecoder().decode(jsonObj.getString("img"));
+                        InputStream inputStream = new ByteArrayInputStream(decodeString);
+                        imageList.add(BitmapFactory.decodeStream(inputStream));
                         info.put("item_name", jsonObj.getString("item_name"));
                         info.put("item_price", jsonObj.getString("item_price"));
                         info.put("arrived_date", jsonObj.getString("arrived_date"));
